@@ -1,7 +1,7 @@
-pub mod boxplot;
-pub mod measurements;
-pub mod progress;
-pub mod speedtest;
+mod boxplot;
+mod measurements;
+mod progress;
+mod speedtest;
 
 use clap::Parser;
 use speedtest::speed_test;
