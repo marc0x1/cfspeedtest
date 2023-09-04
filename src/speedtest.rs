@@ -116,7 +116,7 @@ impl PayloadSize {
     }
 }
 
-struct Metadata {
+pub struct Metadata {
     city: String,
     country: String,
     ip: String,

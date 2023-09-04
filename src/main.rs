@@ -3,7 +3,7 @@ mod measurements;
 mod progress;
 mod speedtest;
 
-use crate::speedtest::{OutputFormat, SpeedTestOptions};
+use crate::speedtest::SpeedTestOptions;
 use clap::Parser;
 use speedtest::speed_test;
 
