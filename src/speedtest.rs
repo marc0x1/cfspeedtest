@@ -102,7 +102,7 @@ impl PayloadSize {
         }
     }
 
-    fn sizes_from_max(max_payload_size: PayloadSize) -> Vec<usize> {
+    pub fn sizes_from_max(max_payload_size: PayloadSize) -> Vec<usize> {
         log::debug!("getting payload iterations for max_payload_size {max_payload_size:?}");
         let payload_bytes: Vec<usize> =
             vec![100_000, 1_000_000, 10_000_000, 25_000_000, 100_000_000];
@@ -165,7 +165,7 @@ pub fn speed_test(client: Client, options: SpeedTestOptions) {
     );
 }
 
-fn run_latency_test(
+pub fn run_latency_test(
     client: &Client,
     nr_latency_tests: u32,
     output_format: Option<OutputFormat>,
@@ -219,7 +219,7 @@ fn test_latency(client: &Client) -> f64 {
     }
     req_latency
 }
-fn run_tests(
+pub fn run_tests(
     client: &Client,
     test_fn: fn(&Client, usize, Option<OutputFormat>) -> f64,
     test_type: TestType,
@@ -257,7 +257,7 @@ fn run_tests(
     measurements
 }
 
-fn test_upload(
+pub fn test_upload(
     client: &Client,
     payload_size_bytes: usize,
     output_format: Option<OutputFormat>,
@@ -279,7 +279,7 @@ fn test_upload(
     mbits
 }
 
-fn test_download(
+pub fn test_download(
     client: &Client,
     payload_size_bytes: usize,
     output_format: Option<OutputFormat>,
@@ -316,7 +316,7 @@ fn print_current_speed(
     );
 }
 
-fn fetch_metadata(client: &Client) -> Metadata {
+pub fn fetch_metadata(client: &Client) -> Metadata {
     let url = &format!("{}/{}{}", BASE_URL, DOWNLOAD_URL, 0);
     let headers = client
         .get(url)
