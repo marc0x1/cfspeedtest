@@ -18,7 +18,7 @@ const DOWNLOAD_URL: &str = "__down?bytes=";
 const UPLOAD_URL: &str = "__up";
 
 #[derive(Clone, Copy, Debug)]
-pub(crate) enum OutputFormat {
+pub enum OutputFormat {
     Csv,
     Json,
     JsonPretty,
@@ -38,7 +38,7 @@ impl OutputFormat {
 /// Unofficial CLI for speed.cloudflare.com
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-pub(crate) struct SpeedTestOptions {
+pub struct SpeedTestOptions {
     /// Number of test runs per payload size. Needs to be at least 4
     #[arg(value_parser = clap::value_parser!(u32).range(4..1000), short, long, default_value_t = 10)]
     pub nr_tests: u32,
@@ -70,13 +70,13 @@ pub(crate) struct SpeedTestOptions {
 }
 
 #[derive(Clone, Copy, Debug, Hash, Serialize, Eq, PartialEq)]
-pub(crate) enum TestType {
+pub enum TestType {
     Download,
     Upload,
 }
 
 #[derive(Clone, Debug)]
-pub(crate) enum PayloadSize {
+pub enum PayloadSize {
     K100 = 100_000,
     M1 = 1_000_000,
     M10 = 10_000_000,
@@ -134,7 +134,7 @@ impl Display for Metadata {
     }
 }
 
-pub(crate) fn speed_test(client: Client, options: SpeedTestOptions) {
+pub fn speed_test(client: Client, options: SpeedTestOptions) {
     let metadata = fetch_metadata(&client);
     if options.output_format.is_none() {
         println!("{metadata}");

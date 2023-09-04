@@ -1,7 +1,7 @@
 use log;
 const PLOT_WIDTH: usize = 40;
 
-pub(crate) fn render_plot(minima: f64, q1: f64, median: f64, q3: f64, maxima: f64) -> String {
+pub fn render_plot(minima: f64, q1: f64, median: f64, q3: f64, maxima: f64) -> String {
     // TODO print axis labels
     let value_range = maxima - minima;
     let quartile_0 = q1 - minima;

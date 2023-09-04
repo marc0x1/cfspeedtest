@@ -18,10 +18,10 @@ struct StatMeasurement {
 }
 
 #[derive(Serialize)]
-pub(crate) struct Measurement {
-    pub(crate) test_type: TestType,
-    pub(crate) payload_size: usize,
-    pub(crate) mbit: f64,
+pub struct Measurement {
+    pub test_type: TestType,
+    pub payload_size: usize,
+    pub mbit: f64,
 }
 
 impl Display for Measurement {
@@ -36,7 +36,7 @@ impl Display for Measurement {
     }
 }
 
-pub(crate) fn log_measurements(
+pub fn log_measurements(
     measurements: &[Measurement],
     payload_sizes: Vec<usize>,
     verbose: bool,
@@ -166,7 +166,7 @@ fn median(data: &[f64]) -> f64 {
     }
 }
 
-pub(crate) fn format_bytes(bytes: usize) -> String {
+pub fn format_bytes(bytes: usize) -> String {
     match bytes {
         1_000..=999_999 => format!("{}KB", bytes / 1_000),
         1_000_000..=999_999_999 => format!("{}MB", bytes / 1_000_000),
