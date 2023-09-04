@@ -2,8 +2,8 @@ use crate::measurements::format_bytes;
 use crate::measurements::log_measurements;
 use crate::measurements::Measurement;
 use crate::progress::print_progress;
-use crate::OutputFormat;
-use crate::SpeedTestOptions;
+
+use clap::Parser;
 use log;
 use regex::Regex;
 use reqwest::{blocking::Client, header::HeaderValue, StatusCode};
@@ -16,6 +16,58 @@ use std::{
 const BASE_URL: &str = "http://speed.cloudflare.com";
 const DOWNLOAD_URL: &str = "__down?bytes=";
 const UPLOAD_URL: &str = "__up";
+
+#[derive(Clone, Copy, Debug)]
+pub(crate) enum OutputFormat {
+    Csv,
+    Json,
+    JsonPretty,
+}
+
+impl OutputFormat {
+    pub fn from(output_format_string: String) -> Result<Self, String> {
+        match output_format_string.to_lowercase().as_str() {
+            "csv" => Ok(Self::Csv),
+            "json" => Ok(Self::Json),
+            "json_pretty" | "json-pretty" => Ok(Self::JsonPretty),
+            _ => Err("Value needs to be one of csv, json or json-pretty".to_string()),
+        }
+    }
+}
+
+/// Unofficial CLI for speed.cloudflare.com
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+pub(crate) struct SpeedTestOptions {
+    /// Number of test runs per payload size. Needs to be at least 4
+    #[arg(value_parser = clap::value_parser!(u32).range(4..1000), short, long, default_value_t = 10)]
+    pub nr_tests: u32,
+
+    /// Number of latency tests to run
+    #[arg(long, default_value_t = 25)]
+    pub nr_latency_tests: u32,
+
+    /// The max payload size in bytes to use [100k, 1m, 10m, 25m or 100m]
+    #[arg(value_parser = parse_payload_size, short, long, default_value_t = PayloadSize::M10)]
+    pub max_payload_size: PayloadSize,
+
+    /// Set the output format [csv, json or json-pretty] >
+    /// This silences all other output to stdout
+    #[arg(value_parser = parse_output_format, short, long)]
+    pub output_format: Option<OutputFormat>,
+
+    /// Enable verbose output i.e. print out boxplots of the measurements
+    #[arg(short, long)]
+    pub verbose: bool,
+
+    /// Force usage of IPv4
+    #[arg(long)]
+    pub ipv4: bool,
+
+    /// Force usage of IPv6
+    #[arg(long)]
+    pub ipv6: bool,
+}
 
 #[derive(Clone, Copy, Debug, Hash, Serialize, Eq, PartialEq)]
 pub(crate) enum TestType {
@@ -292,4 +344,12 @@ fn extract_header_value(
         .to_str()
         .unwrap()
         .to_owned()
+}
+
+fn parse_payload_size(input_string: &str) -> Result<PayloadSize, String> {
+    PayloadSize::from(input_string.to_string())
+}
+
+fn parse_output_format(input_string: &str) -> Result<OutputFormat, String> {
+    OutputFormat::from(input_string.to_string())
 }

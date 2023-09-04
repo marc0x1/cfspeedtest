@@ -1,5 +1,6 @@
+use crate::boxplot;
+use crate::speedtest::OutputFormat;
 use crate::speedtest::TestType;
-use crate::{boxplot, OutputFormat};
 use indexmap::IndexSet;
 use serde::Serialize;
 use std::{fmt::Display, io};

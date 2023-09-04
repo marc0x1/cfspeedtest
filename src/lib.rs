@@ -1,4 +1,4 @@
 pub mod boxplot;
 pub mod measurements;
-pub mod speedtest;
 pub mod progress;
+pub mod speedtest;
